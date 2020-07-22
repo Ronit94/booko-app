@@ -1,58 +1,59 @@
 import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
+import {routes,Auth} from './app/config';
+import {BrowserRouter as Router,Switch,Route,Redirect} from 'react-router-dom';
+import PageNotFoundComponent from './pages/exceptions/pagenotfound.component'
+import decode from 'jwt-decode';
 import './App.css';
 
+
 function App() {
+  if(!isTokenExpired()){
+    Auth.isAuthenticated = true
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
+    <div>
+    <Router>
+        <Switch>
+        <Route exact path='/' render={() => (
+						Auth.isAuthenticated ? 
+								(<Redirect to="/dashboard/analytics" />) : 
+								(<Redirect to="/login" />)
+					)} />
+
+          {routes.map((route, i) => (
+            <RouteWithSubRoutes key={i} {...route} />
+          ))}
+          <Route component={PageNotFoundComponent}/>
+        </Switch>
+    </Router>
     </div>
   );
+}
+
+function RouteWithSubRoutes(route) {   
+  return (
+    <Route
+       path={route.path}
+      render={({props}) => (
+        route.auth ? Auth.isAuthenticated ?  ( <route.component {...props} routes={route.routes} />) :  (<Redirect to="/login"/>) : !Auth.isAuthenticated ? 
+        ( <route.component {...props} routes={route.routes} />) : (<Redirect to="/dashboard/analytics" />)
+      )}
+    />
+  );
+}
+
+function isTokenExpired(){
+  try{
+    let token = JSON.parse(localStorage.getItem('authToken'))
+    const decoded = decode(token.token);
+    if (decoded.exp < Date.now() / 1000) {
+      return true;
+    }
+    else
+      return false;
+  }catch(error){
+    return true
+  }
 }
 
 export default App;

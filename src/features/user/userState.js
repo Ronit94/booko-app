@@ -7,6 +7,7 @@ export const userReducer = createSlice({
   },
   reducers: {
     userLogin: state => {
+      console.log(state.value)
       if(state.value.isLogin){
         state.value.isLogin = true
       }

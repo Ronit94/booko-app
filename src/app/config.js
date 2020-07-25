@@ -17,6 +17,13 @@ export const server ={
 }
 
 
+export function setConfigToken(){
+  if(localStorage.getItem('authToken')){
+    server.authToken = localStorage.getItem('authToken') === null ? null : JSON.parse(localStorage.getItem('authToken')).token
+  }
+}
+
+
 
 
 export const routes = [

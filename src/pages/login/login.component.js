@@ -3,6 +3,7 @@ import { Card,Row, Col,Form, Input, Button, Checkbox,Typography,Space,Spin,messa
 import {  UserOutlined, LockOutlined,LoginOutlined,FacebookOutlined,GoogleOutlined,GithubOutlined} from '@ant-design/icons';
 import { Link,useHistory, withRouter } from "react-router-dom";
 import {AuthService,CommonServices} from '../../providers/services';
+import {setConfigToken} from '../../app/config';
 import logo from '../../logo.png';
 const { Title,Paragraph,Text } = Typography;
 
@@ -26,8 +27,12 @@ function LoginComponent() {
         if(res.status!==200){
           message.error(res.responseText)
         }else{
-         AuthService.setAuthToken(JSON.stringify(res.responseData))
-         history.replace('/')
+         AuthService.setAuthToken(JSON.stringify(res.responseData)).then((res)=>{
+           if(res){
+             setConfigToken()
+              history.replace('/')
+           }
+         })
          message.success(res.responseText)
         }
        }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Card,Row, Col,Form, Input, Button,Select ,Typography,Space,Spin,message  } from 'antd';
 import {  UserOutlined, LockOutlined,KeyOutlined,MobileOutlined} from '@ant-design/icons';
 import {CommonServices} from '../../providers/services';
@@ -9,6 +9,38 @@ const {Option} = Select
 
 export function RegistrationComponent() {
   let [loading, setLoading] = useState(false);
+  let [colleges,setCollegeData] = useState([])
+  let [states,setState] = useState([])
+
+  function onChange(value) {
+    console.log(`selected ${value}`);
+  }
+  
+  function onBlur() {
+    console.log('blur');
+  }
+  
+  function onFocus() {
+    console.log('focus');
+  }
+  
+  function onSearch(val) {
+    console.log('search:', val);
+  }
+
+  useEffect(() => {
+    setLoading(true)
+    CommonServices.commonHttpGetServer('core/fetch-college-data').then((res)=>{
+      if(res.status===200){
+        setCollegeData(res.responseData.colleges)
+        setState(res.responseData.state)
+        setLoading(false)
+      }
+    })
+    return () => {
+       
+    };
+  }, []);
 
   const onFinish = values => {
     setLoading(true)
@@ -65,6 +97,45 @@ export function RegistrationComponent() {
         <Input style={{ width: '80%' }} prefix={<MobileOutlined />} placeholder="Mobile number" />
         </Form.Item>
       </Input.Group>
+      <Form.Item name="college"  rules={[{ required: true, message: 'Please input your college!' }]}>
+      <Select
+          showSearch
+          style={{ width: '100%' }}
+          placeholder="Select a Colleges"
+          optionFilterProp="children"
+          onChange={onChange}
+          onFocus={onFocus}
+          onBlur={onBlur}
+          onSearch={onSearch}
+          
+          filterOption={(input, option) =>
+            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
+        >
+         {colleges.map(d => (
+          <Option key={d}>{d}</Option>
+        ))}
+        </Select>
+      </Form.Item>
+      <Form.Item name="state"  rules={[{ required: true, message: 'Please input your state!' }]}>
+      <Select
+          showSearch
+          style={{ width: '100%' }}
+          placeholder="Select a Colleges"
+          optionFilterProp="children"
+          onChange={onChange}
+          onFocus={onFocus}
+          onBlur={onBlur}
+          onSearch={onSearch}
+          filterOption={(input, option) =>
+            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
+        >
+         {states.map(d => (
+          <Option key={d}>{d}</Option>
+        ))}
+        </Select>
+      </Form.Item>
       <Form.Item
         name="password"
         rules={[{ required: true, message: 'Please input your Password!' }]}

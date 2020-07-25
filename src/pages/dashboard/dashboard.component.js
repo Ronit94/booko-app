@@ -7,7 +7,7 @@ import { Link,useHistory } from "react-router-dom";
 import { UserOutlined,VideoCameraOutlined,UploadOutlined,SettingOutlined,LogoutOutlined} from '@ant-design/icons';
 import PageNotFoundComponent from '../exceptions/pagenotfound.component';
 import {AuthService,CommonServices} from '../../providers/services';
-import {setUserData} from '../../features/user/userState';
+import {setUserData,userLogin} from '../../features/user/userState';
 import booko from '../../booko_logo.svg';
 
 const { Sider,Header,Footer,Content } = Layout;
@@ -69,6 +69,7 @@ function DashboardComponent({ routes }) {
           onBreakpoint={broken => {
           }}
           onCollapse={(collapsed, type) => {
+            dispatch(userLogin())
             console.log(collapsed, type);
           }}
         >
@@ -112,7 +113,7 @@ function DashboardComponent({ routes }) {
         </Dropdown>
           </div>
       </Header>
-          <Content style={{ margin: '24px 16px 0' }}>
+          <Content style={{ margin: '20px 16px 0' }}>
             <div className="site-layout-background" style={{ padding: 24, minHeight: 600 }}>
             <Switch>
               {routes.map((route, i) => (

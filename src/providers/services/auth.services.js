@@ -3,8 +3,11 @@ import {Auth} from '../../app/config';
 
 export const AuthService = {
   setAuthToken : (token)=>{
-    localStorage.setItem('authToken',token)
-    Auth.isAuthenticated = true
+    return new Promise((resolve,reject)=>{
+      localStorage.setItem('authToken',token)
+      Auth.isAuthenticated = true
+      resolve(true)
+    })
   },
   getAuthToken : ()=>{
     return localStorage.getItem('authToken')

@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import logo from '../../logo.png'
 const { Title,Paragraph,Text } = Typography;
 
-export function ForgotPasswordComponent() {
+function ForgotPasswordComponent() {
   let [loading, setLoading] = useState(false);
 
   const onFinish = values => {
@@ -52,3 +52,5 @@ onFinish={onFinish} style={{marginLeft:20}}
   </Card>
   );
 }
+
+export default ForgotPasswordComponent

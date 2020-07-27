@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react';
-import {  useDispatch } from 'react-redux';
+import {  useDispatch,useSelector } from 'react-redux';
 import {Switch, withRouter,Route} from 'react-router-dom';
 import {RouteWithSubRoutes} from '../../app/config';
 import { Layout,Menu,Spin,Dropdown} from 'antd';
@@ -7,16 +7,10 @@ import { Link,useHistory } from "react-router-dom";
 import { UserOutlined,VideoCameraOutlined,UploadOutlined,SettingOutlined,LogoutOutlined} from '@ant-design/icons';
 import PageNotFoundComponent from '../exceptions/pagenotfound.component';
 import {AuthService,CommonServices} from '../../providers/services';
-import {setUserData,userLogin} from '../../features/user/userState';
+import {setUserData,userLogin,userinfo} from '../../features/user/userState';
 import booko from '../../booko_logo.svg';
 
 const { Sider,Header,Footer,Content } = Layout;
-
-
-
-
-
-
 
 function DashboardComponent({ routes }) {
   const menu = (
@@ -41,6 +35,7 @@ function DashboardComponent({ routes }) {
   let [user, setProfile] = useState({});
   const dispatch = useDispatch();
   const history = useHistory();
+  const userData = useSelector(userinfo)
   useEffect(() => {
     CommonServices.commonHttpGetServer('admin/fetch-admin-data').then((res)=>{
       if(res.status===200){
@@ -58,7 +53,9 @@ function DashboardComponent({ routes }) {
     history.replace('/')
   }
 
-
+  if(Object.keys(userData).length!==0){
+    user = userData
+  }
 
   return (
 
@@ -99,7 +96,7 @@ function DashboardComponent({ routes }) {
             if (user!==undefined && user.meta) {
               return (
                 <div  onClick={e => e.preventDefault()}>
-                  <img src={user.meta.ProfilePicture ? user.meta.ProfilePicture : 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png'} alt="profile" height={20} width={20}/> {user.AdminName}
+                  <img src={user.meta.profilePicture ? user.meta.profilePicture : 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png'} alt="profile" height={20} width={20}/> {user.AdminName}
                 </div>
               )
             } else {

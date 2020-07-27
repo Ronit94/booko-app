@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Row,Col,Form,Input,Button,InputNumber, Skeleton } from 'antd';
-import { UploadOutlined} from '@ant-design/icons';
-import {userinfo} from '../../../../features/user/userState';
-import {useSelector} from 'react-redux';
+import { Row,Col,Form,Input,Button,InputNumber,Select,DatePicker,Skeleton,message,Spin} from 'antd';
+import {useSelector,useDispatch} from 'react-redux';
+import {userinfo,setUserData} from '../../../../features/user/userState';
+import {CommonServices} from '../../../../providers/services'
+const {Option} = Select
 const layout = {
     labelCol: {
       span: 8,
@@ -13,70 +14,124 @@ const layout = {
   };
 
 
-
-
-
 function BasicSettings(){
-    let userData = useSelector(userinfo)
-    let [imgloading,setimg] =useState(false) 
+
+    const userData = useSelector(userinfo);
+    const dispatch = useDispatch();
+    const [loading,isloading] = useState(false)
+
+    let user = JSON.parse(JSON.stringify(userData))
+
+
+
     const onFinish = values => {
-        console.log(values);
+        
+        if(values.AdminName){
+          user.AdminName = values.AdminName
+        }
+
+        if(values.Age){
+          user.meta.Age = values.Age
+        }
+         if(values.dob){
+           user.meta.dob = values.dob.format('YYYY-MM-DD')
+         }
+
+         user.Designation = values.Designation
+         user.meta.Address = values.Address
+
+         isloading(true)
+
+         CommonServices.commonHttpPatchServer('admin/update',user).then((res)=>{
+           if(res.status===200){
+            message.success(res.responseText)
+            dispatch(setUserData(user))
+           }else{
+             message.error(res.responseText)
+           }
+           isloading(false)
+         })
     };
 
-    function imgUpload(){
-        setimg(true)
-    }
+
     return (
        <Row>
            <Col span={12}>
-           <Form {...layout} name="nest-messages" onFinish={onFinish}>
-      <Form.Item
-        name={['user', 'name']}
-        label="Name"
-        rules={[
-          {
-            required: true,
-          },
-        ]}
-      >
-        <Input />
-      </Form.Item>
-      <Form.Item
-        name={['user', 'email']}
-        label="Email"
-        rules={[
-          {
-            type: 'email',
-          },
-        ]}
-      >
-        <Input />
-      </Form.Item>
-      <Form.Item
-        name={['user', 'age']}
-        label="Age"
-        rules={[
-          {
-            type: 'number',
-            min: 0,
-            max: 99,
-          },
-        ]}
-      >
-        <InputNumber />
-      </Form.Item>
-      <Form.Item name={['user', 'website']} label="Website">
-        <Input />
-      </Form.Item>
-      <Form.Item name={['user', 'introduction']} label="Introduction">
-        <Input.TextArea />
-      </Form.Item>
-      <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-        <Button type="primary" htmlType="submit">
-          Submit
-        </Button>
-      </Form.Item>
-    </Form>
+          {(() => {
+
+            if(Object.keys(user).length!==0){
+              return(
+                      <Spin spinning={loading}>
+                      <Form {...layout} name="nest-messages" onFinish={onFinish}>
+                      <Form.Item
+                        name="AdminName"
+                        label="Name"
+                      >
+                      <Input value={user.AdminName} />
+                      </Form.Item>
+
+                    <Form.Item
+                      name="Age"
+                      label="Age"
+                      rules={[
+                        {
+                          type: 'number',
+                          min: 25,
+                          max: 99,
+                        },
+                      ]}
+                    >
+                      <InputNumber value={user.meta.Age} />
+                    </Form.Item>
+
+                    <Form.Item name="dob" label="DatePicker">
+                    <DatePicker value={user.dob} />
+                  </Form.Item>
+
+                  <Form.Item
+                    name="Designation"
+                    label="Select"
+                    hasFeedback
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Your designation is required !',
+                      },
+                    ]}
+                  >
+                    <Select placeholder="Please select your designation" value={user.Designation}>
+                      <Option value="Principle">Principle</Option>
+                      <Option value="Secretary">Secretary</Option>
+                      <Option value="Teacher">Teacher</Option>
+                    </Select>
+                  </Form.Item>
+
+                  
+                  <Form.Item name="Address" label="Address" rules={[
+                      {
+                        required: true,
+                        message: 'Your address is required !',
+                      },
+                    ]}>
+                    <Input.TextArea value={user.Address} />
+                  </Form.Item>
+                  <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
+                    <Button type="primary" htmlType="submit">
+                      Submit
+                    </Button>
+                  </Form.Item>
+                </Form>
+                </Spin>
+              )
+            }else{
+              return (
+
+                <Skeleton active={true}></Skeleton>
+              )
+            }
+
+
+          })()}
            </Col>
            <Col span={12}>
            </Col>

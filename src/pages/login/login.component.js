@@ -1,6 +1,6 @@
 import React, { useState,useEffect,useRef } from 'react';
 import { Card,Row, Col,Form, Input, Button, Checkbox,Typography,Space,Spin,message  } from 'antd';
-import {  UserOutlined, LockOutlined,LoginOutlined,FacebookOutlined,GoogleOutlined,GithubOutlined} from '@ant-design/icons';
+import {  UserOutlined, LockOutlined,LoginOutlined} from '@ant-design/icons';
 import { Link,useHistory, withRouter } from "react-router-dom";
 import {AuthService,CommonServices} from '../../providers/services';
 import {setConfigToken} from '../../app/config';
@@ -89,14 +89,6 @@ function LoginComponent() {
           <Button type="default"  shape="round" >
             <Link to="/signup">Signup</Link>
           </Button>
-        </Space>
-      </Form.Item>
-      <Form.Item>
-      Or login using - 
-        <Space size={10}>
-          <Button type="dashed" shape="circle" icon={<FacebookOutlined />} />
-          <Button type="dashed" shape="circle" icon={<GoogleOutlined />} />
-          <Button type="dashed" shape="circle" icon={<GithubOutlined />} />
         </Space>
       </Form.Item>
     </Form>

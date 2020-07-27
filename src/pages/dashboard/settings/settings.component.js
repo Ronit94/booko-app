@@ -10,7 +10,7 @@ const { TabPane } = Tabs;
 
 
 
-export function SettingsComponent() {
+function SettingsComponent() {
     return (
       <Card>
       <Tabs defaultActiveKey="1" tabPosition="top">
@@ -30,3 +30,6 @@ export function SettingsComponent() {
       </Card>
       );
 }
+
+
+export default SettingsComponent

@@ -1,10 +1,10 @@
 import LoginComponent from '../pages/login/login.component';
-import {RegistrationComponent} from '../pages/registration/registration.component';
-import {ForgotPasswordComponent} from '../pages/forgot-password/forgot.component';
+import RegistrationComponent from '../pages/registration/registration.component';
+import ForgotPasswordComponent from '../pages/forgot-password/forgot.component';
 import DashboardComponent from '../pages/dashboard/dashboard.component';
-import {AnalyticsComponent} from '../pages/dashboard/analytics/analytics.component';
-import {ProfileComponent} from '../pages/dashboard/profile/profile.component';
-import {SettingsComponent} from '../pages/dashboard/settings/settings.component';
+import AnalyticsComponent from '../pages/dashboard/analytics/analytics.component';
+import ProfileComponent from '../pages/dashboard/profile/profile.component';
+import SettingsComponent from '../pages/dashboard/settings/settings.component';
 
 import React from 'react';
 import {Route,Redirect} from 'react-router-dom';

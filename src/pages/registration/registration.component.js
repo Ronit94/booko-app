@@ -7,7 +7,7 @@ import logo from '../../logo.png'
 const { Title,Paragraph,Text } = Typography;
 const {Option} = Select
 
-export function RegistrationComponent() {
+function RegistrationComponent() {
   let [loading, setLoading] = useState(false);
   let [colleges,setCollegeData] = useState([])
   let [states,setState] = useState([])
@@ -164,3 +164,6 @@ export function RegistrationComponent() {
         </Card>
   );
 }
+
+
+export default RegistrationComponent

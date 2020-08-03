@@ -12,7 +12,7 @@ export const AuthService = {
     })
   },
   getAuthToken : ()=>{
-    return localStorage.getItem('authToken')
+    return JSON.parse(localStorage.getItem('authToken')).token
   },
   deleteAuthToken : ()=>{
     localStorage.removeItem('authToken')

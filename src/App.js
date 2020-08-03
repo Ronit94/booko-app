@@ -11,7 +11,6 @@ function App() {
     Auth.isAuthenticated = true
   }
   return (
-    <div>
     <Router>
         <Switch>
         <Route exact path='/' render={() => (
@@ -26,7 +25,6 @@ function App() {
           <Route component={PageNotFoundComponent}/>
         </Switch>
     </Router>
-    </div>
   );
 }
 

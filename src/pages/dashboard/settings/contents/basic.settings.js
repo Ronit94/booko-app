@@ -84,7 +84,7 @@ function BasicSettings(){
                       <InputNumber value={user.meta.Age} />
                     </Form.Item>
 
-                    <Form.Item name="dob" label="DatePicker">
+                    <Form.Item name="dob" label="Date of Birth">
                     <DatePicker value={user.dob} />
                   </Form.Item>
 

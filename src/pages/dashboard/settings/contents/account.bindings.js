@@ -1,6 +1,6 @@
 import React,{useState} from 'react';
 import {useSelector,useDispatch,connect} from 'react-redux';
-import {List,Switch,Spin } from 'antd';
+import {List,Switch,Spin,message } from 'antd';
 import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
 import {CommonServices} from '../../../../providers/services';
 import {socket} from '../../../../app/socket';
@@ -26,6 +26,8 @@ function AccountBindings(){
 
 
   function showDrawer(value,action){
+    if(value.id==='Github'){
+      if(action){
     setLoading(true)
     let url = window.location.hostname ==='localhost'?'http://localhost:3024/api/':"https://booko-app.herokuapp.com/api/";
     window.open(`${url}core/github`, 'integrate Github', 'width=600,height=600')
@@ -34,6 +36,7 @@ function AccountBindings(){
       user.projectUsername = data.username
       user.projects = data.projects
       CommonServices.commonHttpPatchServer('admin/update',user).then((response)=>{
+        message.success('Integration successfull')
         dispatch(setUserData(user))
         setLoading(false)
       })
@@ -41,6 +44,17 @@ function AccountBindings(){
         setLoading(false)
       })
     })
+  }else{
+    setLoading(true)
+    CommonServices.commonHttpDeleteServer('admin/integration/github',{}).then((response)=>{
+      if(response.status===200){
+        dispatch(setUserData(response.responseData))
+        message.success('Account deletion successful')
+        setLoading(false)
+      }
+    })
+  }
+    }
   }
     return (
       <>

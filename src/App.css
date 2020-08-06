@@ -112,6 +112,10 @@
 .container:hover .btn {
   opacity: 1;
 }
+.AddStudentForm{
+  width: 60%;
+  margin-top: 15px;
+}
 
 @media only screen and (max-width: 600px) {
   .form-box{
@@ -120,5 +124,9 @@
   }
   .form-box .ant-card{
     margin-top: 10px;
+  }
+  .AddStudentForm{
+    width: 100%;
+    margin-top: 15px;
   }
 }

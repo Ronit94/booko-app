@@ -5,6 +5,8 @@ import DashboardComponent from '../pages/dashboard/dashboard.component';
 import AnalyticsComponent from '../pages/dashboard/analytics/analytics.component';
 import ProfileComponent from '../pages/dashboard/profile/profile.component';
 import SettingsComponent from '../pages/dashboard/settings/settings.component';
+import StudentComponent from '../pages/dashboard/student/student.component';
+
 
 import React from 'react';
 import {Route,Redirect} from 'react-router-dom';
@@ -60,6 +62,11 @@ export const routes = [
         {
           path: "/dashboard/settings",
           component: SettingsComponent,
+          auth : true
+        },
+        {
+          path: "/dashboard/students",
+          component : StudentComponent,
           auth : true
         }
       ]

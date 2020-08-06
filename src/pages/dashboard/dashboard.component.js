@@ -4,7 +4,7 @@ import {Switch, withRouter,Route} from 'react-router-dom';
 import {RouteWithSubRoutes} from '../../app/config';
 import { Layout,Menu,Spin,Dropdown} from 'antd';
 import { Link,useHistory } from "react-router-dom";
-import { UserOutlined,VideoCameraOutlined,UploadOutlined,SettingOutlined,LogoutOutlined} from '@ant-design/icons';
+import { UserOutlined,TeamOutlined,SettingOutlined,LogoutOutlined} from '@ant-design/icons';
 import PageNotFoundComponent from '../exceptions/pagenotfound.component';
 import {AuthService,CommonServices} from '../../providers/services';
 import {setUserData,userLogin,userinfo} from '../../features/user/userState';
@@ -36,6 +36,7 @@ function DashboardComponent({ routes }) {
   const dispatch = useDispatch();
   const history = useHistory();
   const userData = useSelector(userinfo)
+  let pathname = window.location.pathname
   useEffect(() => {
     CommonServices.commonHttpGetServer('admin/fetch-admin-data').then((res)=>{
       if(res.status===200){
@@ -73,18 +74,12 @@ function DashboardComponent({ routes }) {
           <div id="logo">
             <img src={booko} height={30} width={200} alt="Logo"/>
           </div>
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
-            <Menu.Item key="1" icon={<UserOutlined />}>
+          <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']} selectedKeys={pathname==='/dashboard/analytics'? ['1']: pathname==='/dashboard/students' ? ['2']:false}>
+            <Menu.Item key="1" icon={<UserOutlined />} isSelected={pathname==='/dashboard/analytics' ? true : false}>
               <Link to="/dashboard/analytics">Analytics</Link>
             </Menu.Item>
-            <Menu.Item key="2" icon={<VideoCameraOutlined />}>
-              nav 2
-            </Menu.Item>
-            <Menu.Item key="3" icon={<UploadOutlined />}>
-              nav 3
-            </Menu.Item>
-            <Menu.Item key="4" icon={<UserOutlined />}>
-              nav 4
+            <Menu.Item key="2" icon={<TeamOutlined />} isSelected={pathname==='/dashboard/students' ? true : false}>
+              <Link to="/dashboard/students">Students</Link>
             </Menu.Item>
           </Menu>
         </Sider>

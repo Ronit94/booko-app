@@ -1,7 +1,7 @@
 import React,{useState} from 'react';
 import { Form, Input, Button,Select,Descriptions, Spin,message } from 'antd';
 import NumericInput from '../../../../providers/pipes/number.pipe';
-import {connect,useDispatch} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {setUserData} from '../../../../features/user/userState';
 import {CommonServices} from '../../../../providers/services'
 
@@ -16,14 +16,18 @@ const layout = {
   };
 
 function AddStudentComponent(props) {
+  let admin = JSON.parse(JSON.stringify(props.admin))
   const onFinish = values => {
       setLoading(true)
       CommonServices.commonHttpPostServer('admin/add-student',values).then((res)=>{
         if(res.status===200){
+            props.callbackParent(true)
             message.success(res.responseText)
         }else{
             message.warning(res.responseText)
         }
+        admin.students+=1
+        dispatch(setUserData(admin))
         setLoading(false)
       })
   };
@@ -56,6 +60,14 @@ function AddStudentComponent(props) {
       </Form.Item>
       <Form.Item name="ContactNo" label="Phone" rules={[{required:true,message:"Phone number is required" }]}>
         <NumericInput />
+      </Form.Item>
+      <Form.Item name="Gender" label="Gender"
+        rules={[{ required: true, message: 'Gender should be added' }]}
+      >
+        <Select placeholder="Please select student current semester">
+            <Option value="Male">Male</Option>
+            <Option value="Female">Female</Option>
+        </Select>
       </Form.Item>
       <Form.Item name="CurrentSemester" label="Semester"
         rules={[{ required: true, message: 'Semester should be added' }]}

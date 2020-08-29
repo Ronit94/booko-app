@@ -8,6 +8,7 @@ import FollowersComponent from './contents/followers';
 import { UserOutlined,KeyOutlined, PhoneOutlined, BankOutlined, SettingOutlined,AuditOutlined,GlobalOutlined, CloudUploadOutlined,ContactsOutlined} from '@ant-design/icons';
 import {AuthService,CommonServices} from '../../../providers/services'
 import { Link } from 'react-router-dom';
+import HolidayComponent from './contents/holidays';
 const { Title, Paragraph } = Typography;
 const { TabPane } = Tabs;
 
@@ -90,6 +91,9 @@ function ProfileComponent(props) {
               </TabPane>
               <TabPane tab="Followers" key="3">
                 <FollowersComponent />
+              </TabPane>
+              <TabPane tab="Holidays" key="4">
+                <HolidayComponent />
               </TabPane>
             </Tabs>
             </>

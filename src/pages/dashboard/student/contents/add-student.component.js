@@ -1,10 +1,9 @@
 import React,{useState} from 'react';
-import { Form, Input, Button,Select,Descriptions, Spin,message } from 'antd';
+import { Form, Input, Button,Select,Descriptions, Spin,message,Card } from 'antd';
 import NumericInput from '../../../../providers/pipes/number.pipe';
-import {useDispatch} from 'react-redux';
-import {setUserData} from '../../../../features/user/userState';
+import {useDispatch,useSelector} from 'react-redux';
+import {setUserData,userinfo} from '../../../../features/user/userState';
 import {CommonServices} from '../../../../providers/services'
-
 const {Option} = Select
 const layout = {
     labelCol: {
@@ -16,12 +15,13 @@ const layout = {
   };
 
 function AddStudentComponent(props) {
-  let admin = JSON.parse(JSON.stringify(props.admin))
+  let userData = useSelector(userinfo);
+  let admin = JSON.parse(JSON.stringify(userData))
   const onFinish = values => {
       setLoading(true)
       CommonServices.commonHttpPostServer('admin/add-student',values).then((res)=>{
         if(res.status===200){
-            props.callbackParent(true)
+            //props.callbackParent(true)
             message.success(res.responseText)
         }else{
             message.warning(res.responseText)
@@ -43,12 +43,13 @@ function AddStudentComponent(props) {
 
   return (
       <>
+      <Card loading={Object.keys(admin).length===0 ? true : false}>
        <Descriptions title="College Info" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
-        <Descriptions.Item label="Admin Name">{props.admin.AdminName}</Descriptions.Item>
-        <Descriptions.Item label="Students Count">{props.admin.students}</Descriptions.Item>
-        <Descriptions.Item label="Admin Email">{props.admin.AdminEmail}</Descriptions.Item>
-        <Descriptions.Item label="College Name">{props.admin.CollegeName}</Descriptions.Item>
-        <Descriptions.Item label="State">{props.admin.CollegeState}</Descriptions.Item>
+        <Descriptions.Item label="Admin Name">{admin.AdminName}</Descriptions.Item>
+        <Descriptions.Item label="Students Count">{admin.students}</Descriptions.Item>
+        <Descriptions.Item label="Admin Email">{admin.AdminEmail}</Descriptions.Item>
+        <Descriptions.Item label="College Name">{admin.CollegeName}</Descriptions.Item>
+        <Descriptions.Item label="State">{admin.CollegeState}</Descriptions.Item>
         </Descriptions>
     <Spin spinning={loading}>
     <Form {...layout} name="nest-messages" onFinish={onFinish} className="AddStudentForm">
@@ -101,6 +102,7 @@ function AddStudentComponent(props) {
       </Form.Item>
     </Form>
     </Spin>
+    </Card>
     </>
   );
 };

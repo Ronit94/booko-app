@@ -6,11 +6,15 @@ import AnalyticsComponent from '../pages/dashboard/analytics/analytics.component
 import ProfileComponent from '../pages/dashboard/profile/profile.component';
 import SettingsComponent from '../pages/dashboard/settings/settings.component';
 import StudentComponent from '../pages/dashboard/student/student.component';
-
+import StudentListComponent from '../pages/dashboard/student/contents/students-list.component';
+import AddStudentComponent from '../pages/dashboard/student/contents/add-student.component';
+import StudentDetailsComponent from '../pages/dashboard/student/contents/student-details.component';
 
 import React from 'react';
 import {Route,Redirect} from 'react-router-dom';
 import decode from 'jwt-decode';
+
+
 
 
 export const server ={
@@ -67,7 +71,27 @@ export const routes = [
         {
           path: "/dashboard/students",
           component : StudentComponent,
-          auth : true
+          auth : true,
+          routes:[
+            {
+              path: "/dashboard/students/add",
+              name : "Add Student",
+              component : AddStudentComponent,
+              auth : true
+            },
+            {
+              path : "/dashboard/students/list",
+              name : "Students list",
+              component : StudentListComponent,
+              auth : true
+            }, 
+            {
+              path : "/dashboard/students/details/:id",
+              name : "Student Details",
+              component : StudentDetailsComponent,
+              auth : true
+            }
+          ]
         }
       ]
     }

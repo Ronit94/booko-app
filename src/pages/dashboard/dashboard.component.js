@@ -11,23 +11,24 @@ import {setUserData,userLogin,userinfo} from '../../features/user/userState';
 import booko from '../../booko_logo.svg';
 
 const { Sider,Header,Footer,Content } = Layout;
+const { SubMenu } = Menu;
 
 function DashboardComponent({ routes }) {
   const menu = (
     <Menu>
-    <Menu.Item key="0" icon={<UserOutlined />}>
+    <Menu.Item key="0">
      <Link to="/dashboard/profile">
-       User Profile
+     <UserOutlined /> User Profile
      </Link>
     </Menu.Item>
-    <Menu.Item key="1" icon={<SettingOutlined />}>
+    <Menu.Item key="1">
     <Link to="/dashboard/settings">
-      User Settings
+    <SettingOutlined /> User Settings
      </Link>
     </Menu.Item>
     <Menu.Divider />
-    <Menu.Item key="3" icon={<LogoutOutlined />} onClick={userLogOut}> {/** Here you invoking your desired function as method of this, and this in that function will be set to object from that function is called ie: your component object */}
-      Logout  
+    <Menu.Item key="3" onClick={userLogOut}> {/** Here you invoking your desired function as method of this, and this in that function will be set to object from that function is called ie: your component object */}
+    <LogoutOutlined /> Logout  
     </Menu.Item>
   </Menu>
   );
@@ -60,7 +61,7 @@ function DashboardComponent({ routes }) {
 
   return (
 
-    <Layout style={{height:'-webkit-fill-available'}}>
+    <Layout style={{height:'-webkit-fill-available'}} >
         <Sider
           breakpoint="lg"
           collapsedWidth="0"
@@ -74,38 +75,39 @@ function DashboardComponent({ routes }) {
           <div id="logo">
             <img src={booko} height={30} width={200} alt="Logo"/>
           </div>
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']} selectedKeys={pathname==='/dashboard/analytics'? ['1']: pathname==='/dashboard/students' ? ['2']:false}>
+          <Menu defaultSelectedKeys={['1']} defaultOpenKeys={['sub1']} mode="inline" theme="dark">
             <Menu.Item key="1" icon={<UserOutlined />} isSelected={pathname==='/dashboard/analytics' ? true : false}>
               <Link to="/dashboard/analytics">Analytics</Link>
             </Menu.Item>
-            <Menu.Item key="2" icon={<TeamOutlined />} isSelected={pathname==='/dashboard/students' ? true : false}>
-              <Link to="/dashboard/students">Students</Link>
-            </Menu.Item>
-          </Menu>
+            <SubMenu key="2" icon={<TeamOutlined />} title="Students">
+              <Menu.Item key="3" isSelected={pathname==='/dashboard/students' ? true : false}><Link to="/dashboard/students/add">Add Students</Link></Menu.Item>
+              <Menu.Item key="4" isSelected={pathname==='/dashboard/students' ? true : false}><Link to="/dashboard/students/list">Students List</Link></Menu.Item>
+            </SubMenu>
+            </Menu>
         </Sider>
         <Layout>
           <Header className="site-layout-sub-header-background" style={{ padding: 0 }}>
-          <div style={{float:'right',paddingRight:30}}>
-          <Dropdown overlay={menu}>
-           {(() => {
-            if (user!==undefined && user.meta) {
-              return (
-                <div  onClick={e => e.preventDefault()}>
-                  <img src={user.meta.profilePicture ? user.meta.profilePicture : 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png'} alt="profile" height={20} width={20}/> {user.AdminName}
-                </div>
-              )
-            } else {
-              return (
-                <div>
-                    <Spin />
-                </div>
-              )
-            }
-          })()}
-        </Dropdown>
-          </div>
-      </Header>
-          <Content style={{ margin: '20px 16px 0' }}>
+            <div style={{float:'right',paddingRight:30}}>
+                <Dropdown overlay={menu}>
+                {(() => {
+                  if (user!==undefined && user.meta) {
+                    return (
+                      <div  onClick={e => e.preventDefault()}>
+                        <img src={user.meta.profilePicture ? user.meta.profilePicture : 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png'} alt="profile" className="profile-pic"/> {user.AdminName}
+                      </div>
+                    )
+                  } else {
+                    return (
+                      <div>
+                          <Spin />
+                      </div>
+                    )
+                  }
+                })()}
+              </Dropdown>
+            </div>
+          </Header>
+          <Content>
             <div className="site-layout-background" style={{ padding: 24, minHeight: 600 }}>
             <Switch>
               {routes.map((route, i) => (
@@ -115,7 +117,7 @@ function DashboardComponent({ routes }) {
             </Switch>
             </div>
           </Content>
-          <Footer style={{ textAlign: 'center' }}>Booko App created by Ronit Sarma</Footer>
+          <Footer style={{ textAlign: 'center' }}>Educare created by Ronit Sarma</Footer>
         </Layout>
       </Layout>
   );

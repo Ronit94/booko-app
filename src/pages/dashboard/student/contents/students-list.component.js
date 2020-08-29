@@ -1,7 +1,9 @@
 import React,{useState,useEffect} from 'react';
-import { Table } from 'antd';
+import { Table, Card } from 'antd';
 import {CommonServices} from '../../../../providers/services';
 import {Link} from 'react-router-dom';
+import {useSelector} from 'react-redux';
+import {userinfo} from '../../../../features/user/userState';
 const columns = [
     {
       title: 'Name',
@@ -23,7 +25,7 @@ const columns = [
     {
       title: 'Email',
       dataIndex: 'StudentEmail',
-      render: text => <Link to="/dashboard/student/list">{text}</Link>
+      render: (text,record) => <Link to={`/dashboard/students/details/${record._id}`}>{text}</Link>
     },
     {
       title : 'Semester',
@@ -52,25 +54,39 @@ const getRandomuserParams = params => {
   
 
 function StudentListComponent(props) {
-
+  let userData = useSelector(userinfo);
   let [loading,setLoading] = useState(false)
   let [data,setData] = useState([])
-
+  let total = userData.students
   let [pagination , setPagination] = useState({
     current: 1,
     pageSize: 10,
   })
+
+  
 
   useEffect(() => {
     let pagination = {
       current: 1,
       pageSize: 10,
     }
-    fetch(pagination)
-    return () => {};
-  }, []);
+    const fetchData = (params = {}) => {
+      setLoading(true)
+      CommonServices.commonHttpPostServer('admin/fetch-student',getRandomuserParams(params)).then((res)=>{
+        if(res.status===200){
+          setLoading(false)
+          setData(res.responseData)
+          setPagination({
+            ...params.pagination,
+            total: total
+          })
+        }
+      })
+    };
+    fetchData(pagination)
+  }, [total]);
 
-  const fetch = (params = {}) => {
+  const fetchData = (params = {}) => {
     setLoading(true)
     CommonServices.commonHttpPostServer('admin/fetch-student',getRandomuserParams(params)).then((res)=>{
       if(res.status===200){
@@ -78,16 +94,14 @@ function StudentListComponent(props) {
         setData(res.responseData)
         setPagination({
           ...params.pagination,
-          total: props.admin.students,
-          // 200 is mock data, you should read it from server
-          // total: data.totalCount,
+          total: total
         })
       }
     })
   };
 
   const handleTableChange = (pagination, filters, sorter) => {
-    fetch({
+    fetchData({
       sortField: sorter.field,
       sortOrder: sorter.order,
       pagination,
@@ -96,6 +110,7 @@ function StudentListComponent(props) {
   };
 
     return (
+      <Card>
         <Table
         columns={columns}
         rowKey={record => record.StudentEmail}
@@ -104,6 +119,7 @@ function StudentListComponent(props) {
         loading={loading}
         onChange={handleTableChange}
       /> 
+      </Card>
     );
 }
 

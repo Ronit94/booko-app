@@ -4,13 +4,12 @@ import {BrowserRouter as Router,Switch,Route,Redirect} from 'react-router-dom';
 import PageNotFoundComponent from './pages/exceptions/pagenotfound.component'
 import decode from 'jwt-decode';
 import './App.css';
-
-
 function App() {
   if(!isTokenExpired()){
     Auth.isAuthenticated = true
   }
   return (
+
     <Router>
         <Switch>
         <Route exact path='/' render={() => (

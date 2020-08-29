@@ -68,6 +68,7 @@
 .user-profile{
   height: 80%;
   width: 100%;
+  border-radius: 50%;
 }
 
 .container {
@@ -129,4 +130,38 @@
     width: 100%;
     margin-top: 15px;
   }
+}
+
+.gutter-box {
+  padding: 8px 0;
+}
+
+.display-row{
+  margin-top: 10px;
+}
+
+.profile-pic{
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+}
+
+.events {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.events .ant-badge-status {
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+  text-overflow: ellipsis;
+  font-size: 12px;
+}
+.notes-month {
+  text-align: center;
+  font-size: 28px;
+}
+.notes-month section {
+  font-size: 28px;
 }
